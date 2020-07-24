@@ -1,24 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import { Input, Button } from "antd";
+import { Formik } from "formik";
+import * as yup from "yup";
+import Form from "./components/Form";
+import TextField from "./components/TextField";
 function App() {
+  const validationSchema = React.useMemo(() => {
+    return yup.object({
+      name: yup.string().required(),
+      description: yup.string().required(),
+    });
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div>
+      <h1>React Formik</h1>
+      <Formik
+        initialValues={{ name: "", description: "" }}
+        validationSchema={validationSchema}
+        onSubmit={(values, actions) => {
+          setTimeout(() => {
+            alert(JSON.stringify(values, null, 2));
+            actions.setSubmitting(false);
+          }, 1000);
+        }}
+      >
+        {/* <Form> */}
+        <TextField name="name" label="Name" placeholder="Jawa Timur Park" />
+        <TextField
+          name="description"
+          label="Description"
+          placeholder="Interactive jawa timur park map for visitor"
+        />
+        <Button
+          type="primary"
+          htmlType="submit"
+          // loading={projectSync.isMutating}
         >
-          Learn React
-        </a>
-      </header>
+          Create Project
+        </Button>
+        {/* </Form> */}
+      </Formik>
     </div>
   );
 }
